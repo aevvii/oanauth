@@ -3,6 +3,8 @@
 <head><title>OpenAudioNode - Spotify Auth</title></head>
 <body>
 <p>Redirecting...</p>
+<script data-goatcounter="https://aevvi.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 <script>
 var params = new URLSearchParams(window.location.search);
 var code = params.get('code');
@@ -13,13 +15,6 @@ try { decoded = atob(state.replace(/-/g,'+').replace(/_/g,'/')); } catch(e) {}
 var parts = decoded.split('|');
 var nodeHost = parts[0] || '';
 var addNew = parts[1] === 'add_new';
-
-// Track the auth redirect (fire-and-forget)
-try {
-  var img = new Image();
-  img.src = 'https://oanauth.goatcounter.com/count?p=/spotify-auth&t=OAN+Spotify+Auth&r=' + encodeURIComponent(document.referrer);
-} catch(e) {}
-
 if (nodeHost) {
   var url = 'http://' + nodeHost + '/api/spotify/callback';
   if (error) {
