@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>OpenAudioNode - Spotify Auth</title></head>
+<body>
+<p>Redirecting...</p>
+<script>
+var params = new URLSearchParams(window.location.search);
+var code = params.get('code');
+var error = params.get('error');
+var state = params.get('state') || '';
+var nodeHost = '';
+try { nodeHost = atob(state); } catch(e) {}
+if (nodeHost) {
+  var url = 'http://' + nodeHost + '/api/spotify/callback?code=' + encodeURIComponent(code || '');
+  if (error) url = 'http://' + nodeHost + '/api/spotify/callback?error=' + encodeURIComponent(error);
+  window.location.replace(url);
+} else {
+  document.body.innerHTML = '<p>Error: missing node address. Please try again from your OpenAudioNode portal.</p>';
+}
+</script>
+</body>
+</html>
