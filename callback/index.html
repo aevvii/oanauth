@@ -8,11 +8,19 @@ var params = new URLSearchParams(window.location.search);
 var code = params.get('code');
 var error = params.get('error');
 var state = params.get('state') || '';
-var nodeHost = '';
-try { nodeHost = atob(state); } catch(e) {}
+var decoded = '';
+try { decoded = atob(state.replace(/-/g,'+').replace(/_/g,'/')); } catch(e) {}
+var parts = decoded.split('|');
+var nodeHost = parts[0] || '';
+var addNew = parts[1] === 'add_new';
 if (nodeHost) {
-  var url = 'http://' + nodeHost + '/api/spotify/callback?code=' + encodeURIComponent(code || '');
-  if (error) url = 'http://' + nodeHost + '/api/spotify/callback?error=' + encodeURIComponent(error);
+  var url = 'http://' + nodeHost + '/api/spotify/callback';
+  if (error) {
+    url += '?error=' + encodeURIComponent(error);
+  } else {
+    url += '?code=' + encodeURIComponent(code || '');
+    if (addNew) url += '&add_new=1';
+  }
   window.location.replace(url);
 } else {
   document.body.innerHTML = '<p>Error: missing node address. Please try again from your OpenAudioNode portal.</p>';
